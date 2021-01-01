@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col">
+    <input type="text" #termino (keyup)="buscar(termino.value)" class="form-control" placeholder="Buscar Artista">
+  </div>
+</div>
+<br>
+<div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+  <div *ngFor="let artist of artists" class="grid-item mb-2">
+    <div class="card" style="width: 18rem;">
+      <img [src]="artist.images[0].url" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a [href]="artist.external_urls.spotify"> {{ artist.name }} </a>
+        </h5>
+        <p class="card-text">
+          <span *ngFor="let genre of artist.genres" class="badge bg-light text-dark"> {{ genre }} </span>
+        </p>
+      </div>
+      <a [href]="artist.external_urls.spotify" class="btn btn-primary">Open Spotify Web</a>
+      <br>
+      <div class="card-footer">
+        <small class="text-muted">Followers: {{ artist.followers.total }} </small>
+      </div>
+    </div>
+  </div>
+</div>

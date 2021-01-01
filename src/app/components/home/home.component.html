@@ -1,0 +1,18 @@
+<div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+  <div *ngFor="let cancion of nuevasCanciones" class="grid-item mb-1">
+    <div class="card" style="width: 18rem;">
+      <img [src]="cancion.images[0].url" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a [href]="cancion.external_urls.spotify"> {{ cancion.name }} </a>
+        </h5>
+        <p class="card-text">
+          <span *ngFor="let artist of cancion.artists" class="badge bg-light text-dark"> <a [href]="artist.external_urls.spotify"> {{ artist.name }} </a></span>
+        </p>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted"> {{ cancion.release_date }} </small>
+      </div>
+    </div>
+  </div>
+</div>
