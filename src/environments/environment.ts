@@ -11,7 +11,8 @@ export const environment = {
   Grant_Type: 'client_credentials',
 
   // Peticiones API
-  base_url: '//api.spotify.com/v1',
+  base_url: 'https://api.spotify.com/v1',
+  token_url: 'https:spotify-get-token.herokuapp.com/spotify',
 };
 
 /*

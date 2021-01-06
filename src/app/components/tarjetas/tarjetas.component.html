@@ -1,0 +1,28 @@
+<div class="grid animated fadeIn" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+  <div class="grid-item">
+    <div *ngFor="let item of items" class="card m-2" style="width: 18rem;">
+      <img *ngIf="tipo == 'home'" [src]="item.images | noimage" class="card-img-top puntero" alt="...">
+      <img *ngIf="tipo == 'search'" (click)="getArtist(item)" [src]="item.images | noimage" class="card-img-top puntero" alt="...">
+      <div class="card-body">
+        <h5 class="card-title puntero">
+          <a *ngIf="tipo == 'home'"> {{ item.name }} </a>
+          <a *ngIf="tipo == 'search'" (click)="getArtist(item)"> {{ item.name }} </a>
+        </h5>
+        <p class="card-text" *ngIf="tipo == 'home'">
+          <span (click)="getArtist(item, i)" *ngFor="let artist of item.artists; let i = index" class="badge bg-light text-dark puntero"> {{ artist.name }} </span>
+        </p>
+        <p class="card-text" *ngIf="tipo == 'search'">
+          <span *ngFor="let genre of item.genres" class="badge bg-light text-dark"> {{ genre }} </span>
+        </p>
+      </div>
+      <a *ngIf="tipo == 'search'" [href]="item.external_urls.spotify" class="btn btn-outline-success">Open Spotify Web</a>
+      <div class="card-footer" *ngIf="tipo == 'home'">
+        <small class="text-muted"> {{ item.release_date }} </small>
+      </div>
+      <div *ngIf="tipo == 'search'" class="card-footer">
+        <small class="text-muted">Followers: {{ item.followers.total }} </small>
+      </div>
+    </div>
+  </div>
+</div>
+

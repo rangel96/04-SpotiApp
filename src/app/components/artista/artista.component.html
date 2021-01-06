@@ -1,1 +1,52 @@
-<p>artista works!</p>
+<app-loading *ngIf="loading"></app-loading>
+<div class="row">
+  <div class="col-2">
+    <img [src]="artist.images | noimage" class="img-thumbnail img-circle">
+  </div>
+
+  <div class="col">
+    <h3> {{ artist.name }} </h3>
+    <p>
+      <a [href]="artist.external_urls.spotify" target="_blank">
+        Ir a la página del artista
+      </a>
+    </p>
+  </div>
+
+  <div class="col-4 text-right">
+    <button (click)="back()" class="btn btn-outline-success"> Regresar</button>
+  </div>
+</div>
+
+<div class="row m-3">
+  <div class="col">
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th># Top</th>
+        <th>Foto</th>
+        <th>Album</th>
+        <th>Canción</th>
+        <th>PLay</th>
+        <th>Popularidad</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let song of topTracks; let i = index">
+        <th> {{ i + 1 }}  </th>
+        <th> <img [src]="song.album.images | noimage: 2" class="img-thumb"> </th>
+        <th> {{ song.album.name }} </th>
+        <th> {{ song.name }} </th>
+        <th>
+          <iframe [src]="song.id | domSeguro" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </th>
+        <th> {{ song.popularity }} </th>
+      </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+</div>

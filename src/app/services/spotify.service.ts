@@ -1,30 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpotifyService {
   baseUrl = environment.base_url;
-  token = 'BQDzrnPC_rW1--RsEZ00H5I75z9bCjxdLF-3EoRwXmYQxawjX8XYt0CVteo7HVAFI5_XS0eBb64cyLBtTJw';
+  getTokenUrl = environment.token_url;
+  token = 'BQDbzVAcsNDJXrTQdz8l3qBIknOMF8WXb-2qbDnb5X1Q_-oQpIFpUdsMH0X7MoT2rh7b4lW3_WFw0AuUYFU';
 
   // Spotify
   clientId = environment.Client_ID;
   clientSecret = environment.Client_Secret;
-  grantType = environment.Grant_Type;
 
-  constructor(private http: HttpClient) {  }
-
-  getNewReleases(): any {
+  private getQuery(query: string): any {
     // Declaracion de los headers
     const headers = new HttpHeaders({ Authorization: 'Bearer ' + this.token });
 
-    // URL Completo
-    const path = `${this.baseUrl}/browse/new-releases`;
+    // Variable para la assignation de la URL completo
+    const path = `${this.baseUrl}/${query}`;
 
-    // Peticion http con la URL completa agregando los headers
+    // Petition http con la URL completa agregando los headers
     return this.http.get(path, { headers });
+  }
+
+  constructor(private http: HttpClient) {
+  }
+
+  getNewReleases(): any {
+    // Obtener querycompleta
+    return this.getQuery('browse/new-releases')
+      .pipe(map(response => response['albums'].items));
   }
 
   // Segunda opcion de headers - Ponerlo directo
@@ -34,30 +42,25 @@ export class SpotifyService {
   }*/
 
   search(palabra: string): any {
-    // Declaracion de los headers
-    const headers = new HttpHeaders({ Authorization: 'Bearer ' + this.token });
+    return this.getQuery(`search?query=${palabra}&offset=0&limit=20&type=artist`)
+      .pipe(map(res => res['artists'].items));
+  }
 
-    // URL Completo
-    const path = `${this.baseUrl}/search?query=${palabra}&offset=0&limit=20&type=artist`;
+  getArtist(id: string): any {
+    return this.getQuery(`artists/${id}`);
+  }
 
-    // Peticion http con la URL completa agregando los headers
-    return this.http.get(path, { headers });
+  getTopTracks(id: string): any {
+    return this.getQuery(`artists/${id}/top-tracks?market=MX`)
+      .pipe(map(res => res['tracks']));
   }
 
   getToken(): any {
-    // Body por x-www-form-urlecoded
-    const headers = new HttpHeaders({ content_type: 'application/x-www-form-urlencoded' });
-    const body = {
-      grant_type: this.grantType,
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-    };
-
     // URL Completa
-    const path = `https://accounts.spotify.com/api/token?grant_type`;
+    const path = `${this.getTokenUrl}/${this.clientId}/${this.clientSecret}`;
 
     // Peticion http con la URL completa agregando el body
-    return this.http.post(path, body, { headers });
+    return this.http.get(path).pipe(map(token => this.token = token['access_token']));
     // return null;
   }
 
